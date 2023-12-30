@@ -13,7 +13,7 @@ fn main() {
 
     let args: Args = Args::parse();
 
-    println!("Welcome to 🧪");
+    println!("Welcome to Remembrall 🧙");
 
     let mut name: String = args.name.clone();
 

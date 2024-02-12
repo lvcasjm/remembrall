@@ -1,0 +1,12 @@
+{
+  "db_name": "MySQL",
+  "query": "\n            CREATE TABLE IF NOT EXISTS media (\n                id INT NOT NULL AUTO_INCREMENT,\n                title VARCHAR(255) NOT NULL,\n                description VARCHAR(255) NOT NULL,\n                media_type VARCHAR(255) NOT NULL,\n                completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n                PRIMARY KEY (id)\n            );\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 0
+    },
+    "nullable": []
+  },
+  "hash": "eccb9f723d45d387d2603a9a996795e1a25e7e602e1b2c798716b86a4d1e9b77"
+}

@@ -1,9 +1,20 @@
 use crate::media::Media;
+use crate::RemembrallConfig;
 use inquire::{DateSelect, Select, Text};
+
+pub(crate) fn request_connection_string() {
+    let connection_url =
+        Text::new("To get started using Remembrall, please start by providing a connection url, the url should be a valid connection string to a running mysql database.")
+            .prompt()
+            .unwrap();
+
+    let updated_config: RemembrallConfig = RemembrallConfig { connection_url };
+
+    confy::store("remembrall", None, &updated_config).unwrap();
+}
 
 pub(crate) fn prompt() -> Media {
     // 1. show a welcome message
-    println!("Welcome to Remembrall 🧙");
     println!(
         "Let's start by logging something you finished watching, reading, or playing recently."
     );

@@ -1,9 +1,14 @@
 use crate::media::Media;
+use crate::RemembrallConfig;
+use dotenv::dotenv;
 use sqlx::MySqlPool;
-use std::env;
 
 pub(crate) async fn save(media: &Media) -> anyhow::Result<bool> {
-    let pool = MySqlPool::connect(&env::var("DATABASE_URL")?).await?;
+    dotenv().ok();
+
+    let config: RemembrallConfig = confy::load("remembrall", None)?;
+
+    let pool = MySqlPool::connect(&config.connection_url).await?;
 
     println!("Please wait, saving in progress!");
 

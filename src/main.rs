@@ -1,8 +1,10 @@
+use inquire::Select;
 use serde::{Deserialize, Serialize};
 
+pub mod create;
+pub mod database;
+mod list;
 pub mod media;
-pub mod prompt;
-pub mod save;
 
 #[derive(Debug, Serialize, Deserialize)]
 struct RemembrallConfig {
@@ -24,14 +26,24 @@ async fn main() -> anyhow::Result<()> {
     let config: RemembrallConfig = confy::load("remembrall", None)?;
 
     if config.connection_url.is_empty() {
-        prompt::request_connection_string()
+        create::request_connection_string()
     }
 
-    let media = prompt::prompt();
+    let available_actions = vec!["List", "Create"];
 
-    save::save(&media).await?;
+    let action = Select::new("What do you want to do?", available_actions)
+        .prompt()
+        .unwrap();
 
-    println!("Save successful, bye for now 🧙");
+    if action == "List" {
+        list::query().await;
+    } else if action == "Create" {
+        let media = create::prompt();
+
+        database::save(&media).await?;
+
+        println!("Save successful, bye for now 🧙");
+    }
 
     Ok(())
 }

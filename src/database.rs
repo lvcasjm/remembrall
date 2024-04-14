@@ -1,7 +1,33 @@
+use chrono::NaiveDateTime;
+use dotenv::dotenv;
+use sqlx::mysql::MySqlRow;
+use sqlx::MySqlPool;
+use sqlx::Row;
+
 use crate::media::Media;
 use crate::RemembrallConfig;
-use dotenv::dotenv;
-use sqlx::MySqlPool;
+
+pub(crate) async fn list() -> anyhow::Result<Vec<Media>> {
+    dotenv().ok();
+
+    let config: RemembrallConfig = confy::load("remembrall", None)?;
+
+    let pool = MySqlPool::connect(&config.connection_url).await?;
+
+    let query = sqlx::query("SELECT id, title, description, media_type, completed_at FROM media")
+        .map(|row: MySqlRow| Media {
+            id: row.get("id"),
+            title: row.get("title"),
+            media_type: row.get("media_type"),
+            description: row.get("description"),
+            completed_at: row.get::<NaiveDateTime, &str>("completed_at"),
+        })
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+
+    Ok(query)
+}
 
 pub(crate) async fn save(media: &Media) -> anyhow::Result<bool> {
     dotenv().ok();

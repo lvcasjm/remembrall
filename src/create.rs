@@ -1,6 +1,8 @@
+use chrono::{NaiveDateTime, NaiveTime};
+use inquire::{DateSelect, Select, Text};
+
 use crate::media::Media;
 use crate::RemembrallConfig;
-use inquire::{DateSelect, Select, Text};
 
 pub(crate) fn request_connection_string() {
     let connection_url =
@@ -41,16 +43,19 @@ pub(crate) fn prompt() -> Media {
         .prompt()
         .unwrap();
 
+    let as_date_time = NaiveDateTime::new(date, NaiveTime::default());
+
     // 5. Rating from 1 to 10, could probably do this as Text prompt
     // let rating_options: Vec<u8> = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     // let rating: Option<u8> = Select::new("", rating_options).prompt_skippable().unwrap();
 
     // 6. Show media in a data list and prompt for confirmation
     let media = Media {
+        id: None,
         title,
         media_type: media_type.parse().unwrap(),
         description,
-        completed_at: date,
+        completed_at: as_date_time,
     };
 
     println!("Title: {}", media.title);
@@ -62,6 +67,7 @@ pub(crate) fn prompt() -> Media {
     let confirm_options = vec!["Cancel", "Save"];
     let confirmation = Select::new("Would you like to save this media?", confirm_options).prompt();
 
+    // TODO: Below is not working 😂
     let _res = match confirmation {
         Ok("Cancel") => Ok(()),
         Ok("Save") => Err(&media),

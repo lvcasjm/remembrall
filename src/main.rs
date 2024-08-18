@@ -29,13 +29,15 @@ async fn main() -> anyhow::Result<()> {
         create::request_connection_string()
     }
 
-    let available_actions = vec!["List", "Create"];
+    let available_actions = vec!["List", "Create", "Config"];
 
     let action = Select::new("What do you want to do?", available_actions)
         .prompt()
         .unwrap();
 
-    if action == "List" {
+    if action == "Config" {
+        create::request_connection_string()
+    } else if action == "List" {
         list::query().await;
     } else if action == "Create" {
         let media = create::prompt();

@@ -23,8 +23,7 @@ pub(crate) async fn list() -> anyhow::Result<Vec<Media>> {
             completed_at: row.get::<NaiveDateTime, &str>("completed_at"),
         })
         .fetch_all(&pool)
-        .await
-        .unwrap();
+        .await?;
 
     Ok(query)
 }
@@ -45,7 +44,7 @@ pub(crate) async fn save(media: &Media) -> anyhow::Result<bool> {
                 title VARCHAR(255) NOT NULL,
                 description VARCHAR(255) NOT NULL,
                 media_type VARCHAR(255) NOT NULL,
-                completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                completed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 PRIMARY KEY (id)
             );
         ",

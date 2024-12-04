@@ -1,35 +1,19 @@
 use inquire::Select;
-use serde::{Deserialize, Serialize};
-
-pub mod create;
-pub mod database;
-mod list;
-pub mod media;
-
-#[derive(Debug, Serialize, Deserialize)]
-struct RemembrallConfig {
-    connection_url: String,
-}
-
-impl Default for RemembrallConfig {
-    fn default() -> Self {
-        RemembrallConfig {
-            connection_url: "".to_string(),
-        }
-    }
-}
+use remembrall::config::RemembrallConfig;
+use remembrall::media::Media;
+use remembrall::{create, database, list};
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> anyhow::Result<()> {
     println!("Welcome to Remembrall 🧙");
 
-    let config: RemembrallConfig = confy::load("remembrall", None)?;
+    let conf: RemembrallConfig = confy::load("remembrall", None)?;
 
-    if config.connection_url.is_empty() {
+    if conf.connection_url.is_empty() {
         create::request_connection_string()
     }
 
-    let available_actions = vec!["List", "Create", "Config"];
+    let available_actions = vec!["List", "Create", "Config", "Metadata"];
 
     let action = Select::new("What do you want to do?", available_actions)
         .prompt()
@@ -45,6 +29,12 @@ async fn main() -> anyhow::Result<()> {
         database::save(&media).await?;
 
         println!("Save successful, bye for now 🧙");
+    } else if action == "Metadata" {
+        let media = database::list().await?;
+
+        for item in media {
+            Media::fetch_metadata(&item).await?;
+        }
     }
 
     Ok(())

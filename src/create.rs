@@ -1,10 +1,10 @@
 use chrono::{NaiveDateTime, NaiveTime};
 use inquire::{DateSelect, Select, Text};
 
+use crate::config::RemembrallConfig;
 use crate::media::Media;
-use crate::RemembrallConfig;
 
-pub(crate) fn request_connection_string() {
+pub fn request_connection_string() {
     let connection_url =
         Text::new("To get started using Remembrall, please start by providing a connection url, the url should be a valid connection string to a running mysql database.")
             .prompt()
@@ -15,7 +15,7 @@ pub(crate) fn request_connection_string() {
     confy::store("remembrall", None, &updated_config).unwrap();
 }
 
-pub(crate) fn prompt() -> Media {
+pub fn prompt() -> Media {
     // 1. show a welcome message
     println!(
         "Let's start by logging something you finished watching, reading, or playing recently."

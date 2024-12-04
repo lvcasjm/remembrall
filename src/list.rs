@@ -1,6 +1,6 @@
 use crate::database;
 
-pub(crate) async fn query() {
+pub async fn query() {
     let list = database::list().await.unwrap();
 
     println!("_________________________________________________________________________________________________________________________");
@@ -26,3 +26,4 @@ pub(crate) async fn query() {
 fn truncate(s: String, max: usize) -> String {
     s.chars().take(max).collect()
 }
+

@@ -4,10 +4,10 @@ use sqlx::mysql::MySqlRow;
 use sqlx::MySqlPool;
 use sqlx::Row;
 
+use crate::config::RemembrallConfig;
 use crate::media::Media;
-use crate::RemembrallConfig;
 
-pub(crate) async fn list() -> anyhow::Result<Vec<Media>> {
+pub async fn list() -> anyhow::Result<Vec<Media>> {
     dotenv().ok();
 
     let config: RemembrallConfig = confy::load("remembrall", None)?;
@@ -28,7 +28,7 @@ pub(crate) async fn list() -> anyhow::Result<Vec<Media>> {
     Ok(query)
 }
 
-pub(crate) async fn save(media: &Media) -> anyhow::Result<bool> {
+pub async fn save(media: &Media) -> anyhow::Result<bool> {
     dotenv().ok();
 
     let config: RemembrallConfig = confy::load("remembrall", None)?;

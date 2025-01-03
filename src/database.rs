@@ -1,3 +1,4 @@
+use chrono::Datelike;
 use chrono::NaiveDateTime;
 use dotenv::dotenv;
 use sqlx::mysql::MySqlRow;
@@ -14,7 +15,19 @@ pub async fn list() -> anyhow::Result<Vec<Media>> {
 
     let pool = MySqlPool::connect(&config.connection_url).await?;
 
-    let query = sqlx::query("SELECT id, title, description, media_type, completed_at FROM media")
+    let current_date = chrono::offset::Local::now();
+
+    let year = current_date.year().to_string();
+
+    let statement = format!(
+        "
+        SELECT id, title, description, media_type, completed_at FROM media 
+        WHERE completed_at BETWEEN '{year}-01-01' AND '{year}-12-31';
+        ",
+        year = year
+    );
+
+    let query = sqlx::query(&statement)
         .map(|row: MySqlRow| Media {
             id: row.get("id"),
             title: row.get("title"),

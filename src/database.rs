@@ -1,9 +1,11 @@
 use chrono::Datelike;
 use chrono::NaiveDateTime;
 use dotenv::dotenv;
-use sqlx::mysql::MySqlRow;
+// use sqlx::mysql::MySqlRow;
+use sqlx::sqlite::SqliteRow;
 use sqlx::MySqlPool;
 use sqlx::Row;
+use sqlx::SqlitePool;
 
 use crate::config::RemembrallConfig;
 use crate::media::Media;
@@ -13,7 +15,9 @@ pub async fn list() -> anyhow::Result<Vec<Media>> {
 
     let config: RemembrallConfig = confy::load("remembrall", None)?;
 
-    let pool = MySqlPool::connect(&config.connection_url).await?;
+    let pool = SqlitePool::connect(&config.sqlite_connection_url).await?;
+
+    // let pool = MySqlPool::connect(&config.connection_url).await?;
 
     let current_date = chrono::offset::Local::now();
 
@@ -28,7 +32,7 @@ pub async fn list() -> anyhow::Result<Vec<Media>> {
     );
 
     let query = sqlx::query(&statement)
-        .map(|row: MySqlRow| Media {
+        .map(|row: SqliteRow| Media {
             id: row.get("id"),
             title: row.get("title"),
             media_type: row.get("media_type"),

@@ -10,7 +10,15 @@ pub fn request_connection_string() {
             .prompt()
             .unwrap();
 
-    let updated_config: RemembrallConfig = RemembrallConfig { connection_url };
+    let sqlite_connection_url =
+        Text::new("To get started using Remembrall, please start by providing a connection url, the url should be a valid connection string to a running mysql database.")
+            .prompt()
+            .unwrap();
+
+    let updated_config: RemembrallConfig = RemembrallConfig {
+        sqlite_connection_url,
+        connection_url,
+    };
 
     confy::store("remembrall", None, &updated_config).unwrap();
 }

@@ -12,7 +12,7 @@ async fn main() -> anyhow::Result<()> {
 
     let conf: RemembrallConfig = confy::load("remembrall", None)?;
 
-    if conf.connection_url.is_empty() {
+    if conf.connection_url.is_empty() || conf.sqlite_connection_url.is_empty() {
         create::request_connection_string()
     }
 

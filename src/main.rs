@@ -19,7 +19,6 @@ async fn main() -> anyhow::Result<()> {
 
     let action: String;
 
-    // TODO: improve this to be a match statement with all above opts
     if args.iter().any(|a| a.contains("-l")) {
         action = String::from("List");
     } else if args.iter().any(|a| a.contains("-c")) {

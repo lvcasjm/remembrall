@@ -55,7 +55,7 @@ pub fn prompt() -> Media {
     let confirm_options = vec!["Cancel", "Save"];
     let confirmation = Select::new("Would you like to save this media?", confirm_options).prompt();
 
-    // TODO: Below is not working 😂
+    // TODO: Below doesn't do anything yet, I need to exit early if selected option in not "Save"
     let _res = match confirmation {
         Ok("Cancel") => Ok(()),
         Ok("Save") => Err(&media),

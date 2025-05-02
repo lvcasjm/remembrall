@@ -1,27 +1,7 @@
 use chrono::{NaiveDateTime, NaiveTime};
 use inquire::{DateSelect, Select, Text};
 
-use crate::config::RemembrallConfig;
 use crate::media::Media;
-
-pub fn request_connection_string() {
-    let connection_url =
-        Text::new("To get started using Remembrall, please start by providing a connection url, the url should be a valid connection string to a running mysql database.")
-            .prompt()
-            .unwrap();
-
-    let sqlite_connection_url =
-        Text::new("To get started using Remembrall, please start by providing a connection url, the url should be a valid connection string to a running mysql database.")
-            .prompt()
-            .unwrap();
-
-    let updated_config: RemembrallConfig = RemembrallConfig {
-        sqlite_connection_url,
-        connection_url,
-    };
-
-    confy::store("remembrall", None, &updated_config).unwrap();
-}
 
 pub fn prompt() -> Media {
     // 1. show a welcome message

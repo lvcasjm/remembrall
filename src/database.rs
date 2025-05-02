@@ -3,7 +3,7 @@ use chrono::NaiveDateTime;
 use dotenv::dotenv;
 // use sqlx::mysql::MySqlRow;
 use sqlx::sqlite::SqliteRow;
-use sqlx::MySqlPool;
+// use sqlx::MySqlPool;
 use sqlx::Row;
 use sqlx::SqlitePool;
 
@@ -15,9 +15,7 @@ pub async fn list() -> anyhow::Result<Vec<Media>> {
 
     let config: RemembrallConfig = confy::load("remembrall", None)?;
 
-    let pool = SqlitePool::connect(&config.sqlite_connection_url).await?;
-
-    // let pool = MySqlPool::connect(&config.connection_url).await?;
+    let pool = SqlitePool::connect(&config.connection_url).await?;
 
     let current_date = chrono::offset::Local::now();
 
@@ -50,19 +48,18 @@ pub async fn save(media: &Media) -> anyhow::Result<bool> {
 
     let config: RemembrallConfig = confy::load("remembrall", None)?;
 
-    let pool = MySqlPool::connect(&config.connection_url).await?;
+    let pool = SqlitePool::connect(&config.connection_url).await?;
 
     println!("Please wait, saving in progress!");
 
     sqlx::query!(
         r"
             CREATE TABLE IF NOT EXISTS media (
-                id INT NOT NULL AUTO_INCREMENT,
+                id INTEGER PRIMARY KEY,
                 title VARCHAR(255) NOT NULL,
                 description VARCHAR(255) NOT NULL,
                 media_type VARCHAR(255) NOT NULL,
-                completed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                PRIMARY KEY (id)
+                completed_at DATETIME DEFAULT CURRENT_TIMESTAMP
             );
         ",
     )
@@ -76,7 +73,7 @@ pub async fn save(media: &Media) -> anyhow::Result<bool> {
                 media_type,
                 description,
                 completed_at
-            ) 
+            )
             VALUES (
                 ?,
                 ?,

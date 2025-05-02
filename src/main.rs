@@ -1,8 +1,7 @@
-use std::env;
-
 use inquire::Select;
 use remembrall::config::RemembrallConfig;
-use remembrall::{create, database, list};
+use remembrall::{config, create, database, list};
+use std::env;
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> anyhow::Result<()> {
@@ -12,8 +11,8 @@ async fn main() -> anyhow::Result<()> {
 
     let conf: RemembrallConfig = confy::load("remembrall", None)?;
 
-    if conf.connection_url.is_empty() || conf.sqlite_connection_url.is_empty() {
-        create::request_connection_string()
+    if conf.connection_url.is_empty() {
+        config::request_connection_string()
     }
 
     let available_actions = vec!["List", "Create", "Setup"];
@@ -35,7 +34,7 @@ async fn main() -> anyhow::Result<()> {
     }
 
     if action == "Setup" {
-        create::request_connection_string()
+        config::request_connection_string()
     } else if action == "List" {
         list::query().await;
     } else if action == "Create" {

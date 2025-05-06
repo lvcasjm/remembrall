@@ -1,8 +1,8 @@
 pub mod config;
 
-pub mod create;
 pub mod database;
 pub mod list;
+pub mod prompter;
 
 pub mod media {
     mod model;

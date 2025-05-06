@@ -1,6 +1,6 @@
 use inquire::Select;
 use remembrall::config::RemembrallConfig;
-use remembrall::{config, create, database, list};
+use remembrall::{config, database, list, prompter};
 use std::env;
 
 #[tokio::main(flavor = "current_thread")]
@@ -37,7 +37,7 @@ async fn main() -> anyhow::Result<()> {
     } else if action == "List" {
         list::query().await;
     } else if action == "Create" {
-        let media = create::prompt();
+        let media = prompter::prompt();
 
         database::save(&media).await?;
 

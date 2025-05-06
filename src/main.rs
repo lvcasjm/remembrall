@@ -5,7 +5,7 @@ use std::env;
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> anyhow::Result<()> {
-    let args: Vec<String> = env::args().collect();
+    let args: Vec<String> = env::args().skip(1).collect();
 
     println!("Welcome to Remembrall 🧙");
 
@@ -15,33 +15,38 @@ async fn main() -> anyhow::Result<()> {
         config::request_connection_string()
     }
 
-    let available_actions = vec!["List", "Create", "Setup"];
+    const AVAILABLE_ACTIONS: &[&str] = &["List", "Create", "Setup"];
 
-    let action: String;
+    let action = args
+        .iter()
+        .find_map(|a| {
+            if a.contains("-l") {
+                Some("List")
+            } else if a.contains("-c") {
+                Some("Create")
+            } else if a.contains("-s") {
+                Some("Setup")
+            } else {
+                None
+            }
+        })
+        .map(String::from)
+        .unwrap_or_else(|| {
+            Select::new("What do you want to do?", AVAILABLE_ACTIONS.to_vec())
+                .prompt()
+                .unwrap()
+                .to_string()
+        });
 
-    if args.iter().any(|a| a.contains("-l")) {
-        action = String::from("List");
-    } else if args.iter().any(|a| a.contains("-c")) {
-        action = String::from("Create");
-    } else if args.iter().any(|a| a.contains("-s")) {
-        action = String::from("Setup");
-    } else {
-        action = Select::new("What do you want to do?", available_actions)
-            .prompt()
-            .unwrap()
-            .to_string();
-    }
-
-    if action == "Setup" {
-        config::request_connection_string()
-    } else if action == "List" {
-        media::list::query().await;
-    } else if action == "Create" {
-        let media_fields = prompter::prompt();
-
-        database::save(&media_fields).await?;
-
-        println!("Save successful, bye for now 🧙");
+    match action.as_str() {
+        "Setup" => config::request_connection_string(),
+        "List" => media::list::query().await,
+        "Create" => {
+            let media_fields = prompter::prompt();
+            database::save(&media_fields).await?;
+            println!("Save successful, bye for now 🧙");
+        }
+        _ => unreachable!("Invalid action selected"),
     }
 
     Ok(())

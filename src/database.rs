@@ -1,14 +1,11 @@
+use crate::config::RemembrallConfig;
+use crate::media::Media;
 use chrono::Datelike;
 use chrono::NaiveDateTime;
 use dotenv::dotenv;
-// use sqlx::mysql::MySqlRow;
 use sqlx::sqlite::SqliteRow;
-// use sqlx::MySqlPool;
 use sqlx::Row;
 use sqlx::SqlitePool;
-
-use crate::config::RemembrallConfig;
-use crate::media::Media;
 
 pub async fn list() -> anyhow::Result<Vec<Media>> {
     dotenv().ok();

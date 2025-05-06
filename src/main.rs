@@ -1,6 +1,6 @@
 use inquire::Select;
 use remembrall::config::RemembrallConfig;
-use remembrall::{config, database, list, prompter};
+use remembrall::{config, database, media, prompter};
 use std::env;
 
 #[tokio::main(flavor = "current_thread")]
@@ -35,11 +35,11 @@ async fn main() -> anyhow::Result<()> {
     if action == "Setup" {
         config::request_connection_string()
     } else if action == "List" {
-        list::query().await;
+        media::list::query().await;
     } else if action == "Create" {
-        let media = prompter::prompt();
+        let media_fields = prompter::prompt();
 
-        database::save(&media).await?;
+        database::save(&media_fields).await?;
 
         println!("Save successful, bye for now 🧙");
     }

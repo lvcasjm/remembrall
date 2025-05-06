@@ -26,4 +26,3 @@ pub async fn query() {
 fn truncate(s: String, max: usize) -> String {
     s.chars().take(max).collect()
 }
-

@@ -12,9 +12,41 @@ With the above in mind, The only reason this is open source is because I enjoyed
 building it and I figure that if someone else wants to use it then why not.
 
 ## TODOs
-[] Cancelling during the save step doesn't work 
 [] List only shows items from the current year, allow for all/any.
 
 ___
 
 ## Installation
+
+### Prereqs
+- Ensure rust installed including `cargo`
+- Create database file.
+
+### Building and Installing
+- `git clone {repo}` 
+- `cd remembrall`
+- cargo build
+- need to work out how the f someone could build this without the hassle of sqlx 
+- cargo install --path .
+
+
+## Usage
+
+```sh
+remembrall
+```
+
+### List
+```sh
+remembrall -l
+```
+
+### Create
+```sh
+remembrall -c
+```
+
+### Setup
+```sh
+remembrall -s
+```

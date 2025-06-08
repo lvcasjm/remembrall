@@ -42,9 +42,18 @@ async fn main() -> anyhow::Result<()> {
         "Setup" => config::request_connection_string(),
         "List" => media::list::query().await,
         "Create" => {
-            let media_fields = prompter::prompt();
-            database::save(&media_fields).await?;
-            println!("Save successful, bye for now 🧙");
+            let media_fields = prompter::prompt().unwrap();
+
+            match &media_fields {
+                Some(fields) => {
+                    database::save(fields).await?;
+                    println!("Save successful, bye for now 🧙");
+                }
+                None => {
+                    println!("No media selected, exiting.");
+                    return Ok(());
+                }
+            }
         }
         _ => unreachable!("Invalid action selected"),
     }

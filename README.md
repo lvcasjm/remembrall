@@ -11,9 +11,6 @@ I built this tool for myself, for a couple of reasons:
 With the above in mind, The only reason this is open source is because I enjoyed
 building it and I figure that if someone else wants to use it then why not.
 
-## TODOs
-[] List only shows items from the current year, allow for all/any.
-
 ___
 
 ## Installation

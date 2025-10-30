@@ -1,5 +1,5 @@
 use crate::database;
-use comfy_table::*;
+use comfy_table::{modifiers::UTF8_ROUND_CORNERS, presets::UTF8_FULL, *};
 
 pub async fn query() {
     let mut table = Table::new();
@@ -7,8 +7,15 @@ pub async fn query() {
     let list = database::list().await.unwrap();
 
     table
+        .load_preset(UTF8_FULL)
+        .apply_modifier(UTF8_ROUND_CORNERS)
         .set_content_arrangement(ContentArrangement::Dynamic)
-        .set_header(vec!["Title", "Description", "Type", "Completed"]);
+        .set_header(vec![
+            Cell::new("Title").add_attribute(Attribute::Bold),
+            Cell::new("Description").add_attribute(Attribute::Bold),
+            Cell::new("Type").add_attribute(Attribute::Bold),
+            Cell::new("Completed").add_attribute(Attribute::Bold),
+        ]);
 
     for row in list {
         table.add_row(vec![

@@ -1,28 +1,23 @@
 use crate::database;
+use comfy_table::*;
 
 pub async fn query() {
+    let mut table = Table::new();
+
     let list = database::list().await.unwrap();
 
-    println!("_________________________________________________________________________________________________________________________");
-    println!(
-        "|{0: <5} | {1: <50} | {2: <20} | {3: <20} | {4: <12}|",
-        "id", "title", "description", "type", "completed"
-    );
+    table
+        .set_content_arrangement(ContentArrangement::Dynamic)
+        .set_header(vec!["Title", "Description", "Type", "Completed"]);
 
-    for media in list {
-        println!(
-            "|{0: <5} | {1: <50} | {2: <20} | {3: <20} | {4: <12}|",
-            media.id.unwrap(),
-            truncate(media.title, 46),
-            media.description,
-            media.media_type,
-            media.completed_at.format("%d/%m/%Y")
-        )
+    for row in list {
+        table.add_row(vec![
+            row.title,
+            row.description,
+            row.media_type,
+            row.completed_at.format("%d/%m/%Y").to_string(),
+        ]);
     }
 
-    println!("-------------------------------------------------------------------------------------------------------------------------");
-}
-
-fn truncate(s: String, max: usize) -> String {
-    s.chars().take(max).collect()
+    println!("{table}");
 }

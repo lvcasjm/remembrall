@@ -16,14 +16,14 @@ pub async fn list() -> anyhow::Result<Vec<Media>> {
 
     let current_date = chrono::offset::Local::now();
 
-    let year = current_date.year().to_string();
+    let _year = current_date.year().to_string();
 
+    // WHERE completed_at BETWEEN '{year}-01-01' AND '{year}-12-31';
     let statement = format!(
         "
-        SELECT id, title, description, media_type, completed_at FROM media 
-        WHERE completed_at BETWEEN '{year}-01-01' AND '{year}-12-31';
+        SELECT id, title, description, media_type, completed_at FROM media;
         ",
-        year = year
+        // year = year
     );
 
     let query = sqlx::query(&statement)

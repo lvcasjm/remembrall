@@ -45,3 +45,11 @@ remembrall -c
 ```sh
 remembrall -s
 ```
+
+## Notes
+
+A git hook can be added to ensure .sqlx files are generated pre-commit so that builds don't need a database to validate sql
+
+```sh
+$ echo "cargo sqlx prepare > /dev/null 2>&1; git add .sqlx > /dev/null" > .git/hooks/pre-commit
+```

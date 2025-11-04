@@ -16,7 +16,7 @@ impl Default for RemembrallConfig {
 
 pub fn request_connection_string() {
     let connection_url =
-        Text::new("To get started using Remembrall, please start by providing a connection url, the url should be a valid connection string to a running mysql database.")
+        Text::new("To get started using Remembrall, please start by providing a connection url, the url should be a valid connection string to a sqlite database.")
             .prompt()
             .unwrap();
 

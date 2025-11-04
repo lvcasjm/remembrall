@@ -10,7 +10,7 @@ anyhow = "1.0"
 clap = { version = "4.0", features = ["derive"] }
 inquire = { version = "0.6.2", features = ["default", "date", "macros"] }
 chrono = "0.4"
-sqlx = { version = "0.7", features = ["sqlite", "mysql", "runtime-tokio", "chrono", "time"] }
+sqlx = { version = "0.7", features = ["sqlite", "runtime-tokio", "chrono", "time"] }
 tokio = { version = "1.35.1", features = ["rt", "rt-multi-thread", "macros"] }
 serde = { version = "1.0.152", features = ["derive"] }
 confy = "0.6.0"

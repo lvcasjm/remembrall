@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n            CREATE TABLE IF NOT EXISTS media (\n                id INTEGER PRIMARY KEY,\n                title VARCHAR(255) NOT NULL,\n                description VARCHAR(255) NOT NULL,\n                media_type VARCHAR(255) NOT NULL,\n                completed_at DATETIME DEFAULT CURRENT_TIMESTAMP\n            );\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 0
+    },
+    "nullable": []
+  },
+  "hash": "734ad8ddc23b365a8024d5d10f86bb6ded28113e28b55e177b2930d16d1d7249"
+}

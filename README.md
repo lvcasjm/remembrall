@@ -23,9 +23,7 @@ ___
 - `git clone {repo}` 
 - `cd remembrall`
 - cargo build
-- need to work out how the f someone could build this without the hassle of sqlx 
 - cargo install --path .
-
 
 ## Usage
 

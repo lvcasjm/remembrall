@@ -1,5 +1,6 @@
 use chrono::{NaiveDateTime, NaiveTime};
 use inquire::{DateSelect, Select, Text};
+use sqlx::{Pool, Sqlite};
 
 use crate::media::Media;
 
@@ -48,4 +49,48 @@ pub fn prompt() -> anyhow::Result<Option<Media>, anyhow::Error> {
         Ok("Save") => Ok(Some(media)),
         _ => Ok(None),
     }
+}
+
+pub async fn save(media: &Media, pool: Pool<Sqlite>) -> anyhow::Result<bool> {
+    println!("Please wait, saving in progress!");
+
+    sqlx::query!(
+        r"
+            CREATE TABLE IF NOT EXISTS media (
+                id INTEGER PRIMARY KEY,
+                title VARCHAR(255) NOT NULL,
+                description VARCHAR(255) NOT NULL,
+                media_type VARCHAR(255) NOT NULL,
+                completed_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            );
+        ",
+    )
+    .execute(&pool)
+    .await?;
+
+    let rows_affected = sqlx::query!(
+        r#"
+            INSERT INTO media (
+                title,
+                media_type,
+                description,
+                completed_at
+            )
+            VALUES (
+                ?,
+                ?,
+                ?,
+                ?
+            );
+        "#,
+        media.title,
+        media.media_type,
+        media.description,
+        media.completed_at,
+    )
+    .execute(&pool)
+    .await?
+    .rows_affected();
+
+    Ok(rows_affected > 0)
 }
